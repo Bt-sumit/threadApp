@@ -13,6 +13,18 @@ const queries = {
         } catch (error) {
             return { success: false, message: error, data: null }
         }
+    },
+    getUserList: async (_: any, __: any, context: any) => {
+        try {
+            if (!context.currentUser) {
+                return { success: false, message: "Bearer tokke is neeed to please give", data: [] }
+            }
+            const users = await userService.userList()
+            return { success: true, message: "User List", data: users }
+
+        } catch (error) {
+            return { success: false, message: error, data: [] }
+        }
     }
 }
 const Mutation = {
@@ -22,7 +34,7 @@ const Mutation = {
             return { success: false, message: "User with this email already exists", data: null, }
         }
         const Id = userService.signup(payload)
-        return { success: false, message: "User successfully created", data: Id, }
+        return { success: true, message: "User successfully created", data: Id, }
     },
     signIn: async (_: any, payload: signIn) => {
         try {

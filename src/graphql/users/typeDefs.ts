@@ -15,4 +15,9 @@ type signin{
   email:String!
   password:String!
 }
+type userList{
+  success: Boolean!
+  message: String!
+    data: [UserData]
+}
 `
