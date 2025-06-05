@@ -20,4 +20,9 @@ type userList{
   message: String!
     data: [UserData]
 }
-`
+type post{
+     userId: ID!
+      title: String!
+      description: String!
+}
+`;

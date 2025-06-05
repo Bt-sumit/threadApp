@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { users } from "./users";
-import { userContext } from "../context/user.context";
+
 const grapqqlServer = async () => {
     const typeDefs = `#graphql
         ${users.typeDefs}
@@ -22,7 +22,7 @@ const grapqqlServer = async () => {
                 ...users.resolvers.Mutation,
             }
         },
-        
+
     });
     return apolloServer;
 };
