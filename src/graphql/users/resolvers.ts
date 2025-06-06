@@ -49,37 +49,47 @@ const Mutation = {
     const Id = userService.signup(payload);
     return { success: true, message: "User successfully created", data: Id };
   },
-  signIn: async (_: any, payload: signIn) => {
+  signIn: async (_: any, payload: signIn, { res }: { res: any }) => {
     try {
       const userEmailExit = await userModel.findOne({ email: payload.email });
       if (!userEmailExit) {
         return {
           success: false,
-          message: "User with this email not exits",
+          message: "User with this email does not exist",
           data: null,
         };
       }
-      if (
-        !(await comparePassword(payload?.password, userEmailExit?.password))
-      ) {
+      const isPasswordValid = await comparePassword(payload?.password, userEmailExit?.password);
+      if (!isPasswordValid) {
         return {
           success: false,
           message: "Please enter correct password",
           data: null,
         };
       }
-      const data = await userService.signIn(userEmailExit);
-      const userInfo = userEmailExit.toObject();
-      const userWithToken = { ...userInfo, token: data };
+      const token = await userService.signIn(userEmailExit);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      const { password, ...safeUser } = userEmailExit.toObject();
       return {
         success: true,
-        message: "user login successfully",
-        data: userWithToken,
+        message: "User login successful",
+        data: safeUser,
       };
-    } catch (error) {
-      return { success: false, message: error, data: null };
+    } catch (error: any) {
+      console.error(error);
+      return {
+        success: false,
+        message: error.message || "Something went wrong",
+        data: null,
+      };
     }
   },
+
   post: async (_: any, payload: postInterface, context: any) => {
     try {
       if (!context.currentUser) {

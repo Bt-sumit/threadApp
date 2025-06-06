@@ -27,20 +27,17 @@ class userService {
             {
                 $facet: {
                     paginatedResult: [
-                       
+
                         { $limit: 2 }
                     ],
                     total: [
-                
+
                         { $count: "totalCount" }
                     ]
                 }
             }
         ]);
-        return  result.paginatedResult
-
+        return result.paginatedResult
     }
-
-
 }
 export default userService
