@@ -89,6 +89,28 @@ const Mutation = {
       };
     }
   },
+  logout: async (_: any, __: any, { res }: { res: any }) => {
+    try {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+
+      return {
+        success: true,
+        message: "Logged out successfully",
+         data: null,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Logout failed",
+         data: null,
+      };
+    }
+  },
+
 
   post: async (_: any, payload: postInterface, context: any) => {
     try {

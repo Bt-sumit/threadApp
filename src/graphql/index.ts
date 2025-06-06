@@ -22,6 +22,7 @@ const grapqqlServer = async () => {
                 ...users.resolvers.Mutation,
             }
         },
+        csrfPrevention: false,
 
     });
     return apolloServer;
