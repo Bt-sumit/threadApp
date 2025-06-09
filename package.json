@@ -17,7 +17,8 @@
     "express": "^5.1.0",
     "mongoose": "^8.15.0",
     "tsc-watch": "^6.3.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "zod": "^3.25.56"
   },
   "dependencies": {
     "@apollo/server": "^4.12.1",
