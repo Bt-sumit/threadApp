@@ -5,6 +5,7 @@ import userService, { signIn } from "../../service/user.service";
 import { userSignup } from "../../service/user.service";
 import { postInterface } from "../../service/post.service";
 import UserValidation from "../../validation/user.validation";
+import posValidation from "../../validation/post.validation";
 const queries = {
   getCurrentLoggedInUser: async (_: any, __: any, context: any) => {
     try {
@@ -40,7 +41,6 @@ const queries = {
 const Mutation = {
   createUser: async (_: any, payload: userSignup) => {
     const validationResult = await UserValidation.validateSignup(payload);
-    console.log("---------------------------------", validationResult);
     if (!validationResult.success && validationResult.error) {
       const firstErrorField = Object.keys(validationResult.error)[0];
       let firstErrorMessage = "Validation error";
@@ -75,7 +75,24 @@ const Mutation = {
 
   signIn: async (_: any, payload: signIn, { res }: { res: any }) => {
     try {
-
+      const validationResult = await UserValidation.validateLogin(payload);
+      if (!validationResult.success && validationResult.error) {
+        const firstErrorField = Object.keys(validationResult.error)[0];
+        let firstErrorMessage = "Validation error";
+        if (
+          typeof validationResult.error === "object" &&
+          !("message" in validationResult.error) &&
+          firstErrorField &&
+          Array.isArray((validationResult.error as Record<string, string[]>)[firstErrorField])
+        ) {
+          firstErrorMessage = (validationResult.error as Record<string, string[]>)[firstErrorField][0] || "Validation error";
+        }
+        return {
+          success: false,
+          message: `${firstErrorMessage}`,
+          data: null,
+        };
+      }
       const userEmailExit = await userModel.findOne({ email: payload.email });
       if (!userEmailExit) {
         return {
@@ -147,6 +164,24 @@ const Mutation = {
   },
   post: async (_: any, payload: postInterface, context: any) => {
     try {
+      const validationResult = await posValidation.validatePost(payload);
+      if (!validationResult.success && validationResult.error) {
+        const firstErrorField = Object.keys(validationResult.error)[0];
+        let firstErrorMessage = "Validation error";
+        if (
+          typeof validationResult.error === "object" &&
+          !("message" in validationResult.error) &&
+          firstErrorField &&
+          Array.isArray((validationResult.error as Record<string, string[]>)[firstErrorField])
+        ) {
+          firstErrorMessage = (validationResult.error as Record<string, string[]>)[firstErrorField][0] || "Validation error";
+        }
+        return {
+          success: false,
+          message: `${firstErrorMessage}`,
+          data: null,
+        };
+      }
       if (!context.currentUser) {
         return {
           success: false,
