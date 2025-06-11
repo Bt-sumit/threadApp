@@ -135,35 +135,24 @@ const Mutation = {
     try {
       const token = req.cookies?.token;
       if (!token) {
-        return {
-          success: false,
-          message: "You are already logged out.",
-          data: null,
-        };
+        return { success: false, message: "You are already logged out.", data: null, };
       }
-      res.clearCookie("token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-      });
-
-      return {
-        success: true,
-        message: "Logged out successfully",
-        data: null,
-      };
+      res.clearCookie("token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", });
+      return { success: true, message: "Logged out successfully", data: null, };
     } catch (error) {
       console.error("Logout error:", error);
-      return {
-        success: false,
-        message: "Logout failed",
-        data: null,
-      };
+      return { success: false, message: "Logout failed", data: null, };
     }
   },
   post: async (_: any, payload: postInterface, context: any) => {
     try {
+      if (!context.currentUser) {
+        return {
+          success: false,
+          message: "Bearer tokke is neeed to please give",
+          data: null,
+        };
+      }
       const validationResult = await posValidation.validatePost(payload);
       if (!validationResult.success && validationResult.error) {
         const firstErrorField = Object.keys(validationResult.error)[0];
@@ -182,13 +171,7 @@ const Mutation = {
           data: null,
         };
       }
-      if (!context.currentUser) {
-        return {
-          success: false,
-          message: "Bearer tokke is neeed to please give",
-          data: null,
-        };
-      }
+
       payload.userId = context?.currentUser?._id as string;
       await userPost.createUserPost(payload);
       return { success: true, message: "post added successfully", data: null };

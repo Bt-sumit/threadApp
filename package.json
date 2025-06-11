@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "prod": "tsc && node src/index.ts",
+    "prod": "tsc && node build/index.js",
     "dev": "tsc-watch --onSuccess \"node build/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +30,7 @@
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "graphql": "^16.11.0",
+    "graphql-upload-ts": "^2.1.2",
     "jsonwebtoken": "^9.0.2"
   }
 }

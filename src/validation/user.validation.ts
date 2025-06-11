@@ -24,12 +24,12 @@ class UserValidation {
     public static validateLogin = async (data: signIn) => {
         try {
             const parsed = await this.loginSchema.parseAsync(data);
-            return {  success: true, data: parsed, error: null,};
+            return { success: true, data: parsed, error: null, };
         } catch (error) {
             if (error instanceof ZodError) {
-                return {  success: false, data: null, error: error.flatten().fieldErrors,};
+                return { success: false, data: null, error: error.flatten().fieldErrors, };
             }
-            return { success: false, data: null, error: { message: "Unknown error during validation" },};
+            return { success: false, data: null, error: { message: "Unknown error during validation" }, };
         }
     }
 }
