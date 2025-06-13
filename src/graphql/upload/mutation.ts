@@ -1,3 +1,3 @@
 export const Mutation = `#graphql
-singleUpload(file: Upload!): File!
+singleUpload(file: Upload!): response
 `

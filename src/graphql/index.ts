@@ -1,9 +1,8 @@
 import { ApolloServer } from "@apollo/server";
 import { users } from "./users";
-import {userPost} from "./post/index";
+import { userPost } from "./post/index";
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { uploadImage } from "./upload/index";
-
 const grapqqlServer = async () => {
     const typeDefs = `#graphql
         ${users.typeDefs}
@@ -52,20 +51,26 @@ const grapqqlServer = async () => {
             },
         ], formatError: (formattedError) => {
             const code = formattedError.extensions?.code || 'INTERNAL_SERVER_ERROR';
+            const rawMessage = formattedError.message;
 
-            if (code === 'GRAPHQL_VALIDATION_FAILED') {
+            // Optional: match specific known validation issues
+            if (rawMessage.includes('Upload') && rawMessage.includes('was not provided')) {
                 return {
-                    message: `Validation Error: ${formattedError.message}`,
-                    code,
-                    status:false
+                    success: false,
+                    message: "No file uploaded. Please provide a valid file.",
+                    code: 'BAD_USER_INPUT',
+    
                 };
             }
+
             return {
-                message: formattedError.message,
+                success: false,
+                message: rawMessage,
                 code,
-                status:false
+
             };
-        },
+        }
+        ,
         csrfPrevention: false,
 
     });

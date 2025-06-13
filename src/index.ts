@@ -14,9 +14,7 @@ const server = async () => {
     const apolloServer = await grapqqlServer();
     await connection()
     await apolloServer.start();
-    app.use("/thread", expressMiddleware(apolloServer,
-
-        { context: userContext }));
+    app.use("/thread", expressMiddleware(apolloServer, { context: userContext }));
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });

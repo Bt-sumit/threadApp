@@ -6,6 +6,11 @@ export const typeDefs = `#graphql
     mimetype: String!
     encoding: String!
   }
+  type response{
+    success: Boolean!
+    message: String!
+    data:String
+  }
 
   type Query {
     # This is only here to satisfy the requirement that at least one
