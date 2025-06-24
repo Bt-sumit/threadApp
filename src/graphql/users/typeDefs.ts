@@ -21,8 +21,8 @@ type userList{
     data: [UserData]
 }
 type post{
-     userId: ID!
-      title: String!
-      description: String!
+    userId: ID!
+    title: String!
+    description: String!
 }
 `;

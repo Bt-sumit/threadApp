@@ -37,10 +37,7 @@ class ImageUploadService {
         .on('finish', () => resolve())
         .on('error', (err) => reject(err));
     });
-
-    // ✅ Get actual file size
     const size = statSync(filePath).size;
-
     return {
       filename,
       mimetype,

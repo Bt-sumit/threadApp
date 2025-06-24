@@ -13,9 +13,6 @@ export const typeDefs = `#graphql
   }
 
   type Query {
-    # This is only here to satisfy the requirement that at least one
-    # field be present within the 'Query' type.  This example does not
-    # demonstrate how to fetch uploads back.
     otherFields: Boolean!
   }
 

@@ -4,6 +4,11 @@ type CreateUserResponse {
   message: String!
   data: UserData
 }
+type CreateUserPost {
+  success: Boolean!
+  message: String!
+  data: [post!]
+}
 type post{
     userId: ID!
     title: String!

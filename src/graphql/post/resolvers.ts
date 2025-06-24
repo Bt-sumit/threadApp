@@ -1,8 +1,26 @@
+import postModel from "../../schema/post";
 import userPost from "../../service/post.service";
 import { postInterface } from "../../service/post.service";
 import posValidation from "../../validation/post.validation";
 const queries = {
-   
+    getuserPost: async (_: any, args: { id: string }, context: any) => {
+        try {
+            console.log("--------",args)
+            const userData = await postModel.find({ userId: args.id });
+            return {
+                success: true,
+                message: "Data fetched successfully",
+                data: userData,
+            };
+        } catch (error: any) {
+            return {
+                success: false,
+                message: error.message || "Something went wrong",
+                data: null,
+            };
+        }
+    },
+
 };
 const Mutation = {
     post: async (_: any, payload: postInterface, context: any) => {
@@ -32,7 +50,6 @@ const Mutation = {
                     data: null,
                 };
             }
-
             payload.userId = context?.currentUser?._id as string;
             await userPost.createUserPost(payload);
             return { success: true, message: "post added successfully", data: null };
